@@ -1,0 +1,84 @@
+modules = ["nodejs-20", "bash", "web", "python-3.11"]
+[agent]
+expertMode = true
+stack = "BEST_EFFORT_FALLBACK"
+integrations = ["python_openai_ai_integrations:1.0.0"]
+
+[nix]
+channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+MONGO_URL = "mongodb://localhost:27017"
+DB_NAME = "nt_commerce"
+JWT_SECRET_KEY = "nt-commerce-dev-secret-key-2024-replit"
+REACT_APP_BACKEND_URL = ""
+PORT = "5000"
+BACKEND_PORT = "8000"
+HOST = "0.0.0.0"
+WDS_SOCKET_HOST = "0.0.0.0"
+WDS_SOCKET_PORT = "443"
+CORS_ORIGINS = "https://ac03248e-6786-4b21-ac0a-e2ad5930091a-00-3fiwnh477vq32.riker.replit.dev"
+PREVIEW_URL = "https://ac03248e-6786-4b21-ac0a-e2ad5930091a-00-3fiwnh477vq32.riker.replit.dev"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Backend API"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && PORT=5000 HOST=0.0.0.0 yarn start"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Backend API"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "mkdir -p /home/runner/workspace/data/db && (mongod --dbpath /home/runner/workspace/data/db --fork --logpath /home/runner/workspace/data/mongod.log --bind_ip 127.0.0.1 2>/dev/null || true) && sleep 2 && cd backend && uvicorn main:app --host 0.0.0.0 --port 8000"
+waitForPort = 8000
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
+
+[[ports]]
+localPort = 5001
+externalPort = 3001
+
+[[ports]]
+localPort = 8000
+externalPort = 80
+
+[deployment]
+deploymentTarget = "vm"
+run = ["bash", "-c", "mkdir -p /home/runner/workspace/data/db && (mongod --dbpath /home/runner/workspace/data/db --fork --logpath /home/runner/workspace/data/mongod.log --bind_ip 127.0.0.1 2>/dev/null || true) && sleep 2 && cd /home/runner/workspace/backend && uvicorn main:app --host 0.0.0.0 --port 5000"]
+build = ["bash", "-c", "cd /home/runner/workspace/frontend && npm install --legacy-peer-deps && npm run build && cp -r build /home/runner/workspace/backend/static/frontend 2>/dev/null || true"]
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 120000

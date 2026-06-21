@@ -1,0 +1,123 @@
+# ========================
+# IDE and editors
+# ========================
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ========================
+# Dependencies
+# ========================
+node_modules/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ========================
+# Environment and secrets
+# ========================
+.env
+.env.*
+*.env
+credentials.json
+*credentials.json*
+*token.json*
+*.pem
+*.key
+.credentials
+
+# ========================
+# Python cache
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+.pythonlibs/
+*.egg-info/
+.ipynb_checkpoints/
+
+# ========================
+# Python test artifacts
+# ========================
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+test_reports/
+
+# ========================
+# Frontend build artifacts
+# ========================
+frontend/build/
+/build
+dist/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# ========================
+# MongoDB runtime (local dev)
+# ========================
+data/db/
+data/mongod.log*
+dump/
+
+# ========================
+# Backend runtime directories
+# ========================
+backend/backups/
+backend/exports/
+backend/imports/
+backend/logs/
+backend/static/downloads/*.json
+backend/static/downloads/*.json.gz
+backend/static/uploads/
+
+# ========================
+# Logs
+# ========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ========================
+# System files
+# ========================
+.DS_Store
+Thumbs.db
+dump.rdb
+
+# ========================
+# Archive and package files
+# ========================
+*.zip
+*.tar.gz
+*.tar
+*.tgz
+*.pack
+*.deb
+*.dylib
+*.vsix
+*.dblx
+
+# ========================
+# Build and dev tool caches
+# ========================
+.cache/
+.vercel
+.chainlit
+chainlit.md
+.ac
+frontend/node_modules/.cache/
+data/backups/

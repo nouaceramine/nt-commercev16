@@ -1,0 +1,15 @@
+- [NT Commerce Bug Fixes](nt-commerce-fixes.md) — multi-tenant SaaS POS; JWT, schemas, duplicates, routes all fixed; key quirks documented
+- [Motherboard Architecture](motherboard-architecture.md) — modular self-diagnostics core in backend/core/; admin-only /api/diagnostics, per-component logs, segment-boundary path matching, install last in main.py
+- [Git destructive ops blocked](git-destructive-ops-blocked.md) — agent can't run git rm/commit even inside an assigned Project Task; untracking data/db must be done by user in Shell
+- [Dual tenant-context systems](dual-tenant-context.md) — main.py vs config/database.py use SEPARATE ContextVars; auth/db "dupes" are load-bearing, merging risks tenant data leakage; sidebar/menu + /ai prefixes also clarified
+- [.pythonlibs uv-wipe hazard](pythonlibs-uv-wipe.md) — uv packager creates root pyproject.toml → uv sync wipes .pythonlibs; recover with pip --user; keep emergentintegrations/litellm out of requirements.txt
+- [Wallet recharge & codes](wallet-recharge-codes.md) — recharge debits platform wallet (main_db) by COST w/ compensating credit; EM/CA/DP/FA no-year, RE/PF with-year via generate_code
+- [Sidebar reorder editor](sidebar-reorder-editor.md) — /settings/sidebar drag-drop page; editor defaults MUST mirror Layout tenantNavSections by section id+item path; never split('-') DnD ids
+- [Tenant branding](tenant-branding.md) — per-tenant logo+name at sidebar top via tenant-scoped db.settings key "tenant_branding"; Layout listens to window 'branding-updated' event
+- [Layout-per-page & AI](layout-per-page-and-ai.md) — every page mounts its own <Layout> (forget it → no sidebar; nav remounts → persist scroll/expanded); AI accountant via Replit AI Integrations OpenAI
+- [Digital Services Panel](digital-panel.md) — IPTV/resellers; NEVER debits SaaS wallet (that's recharge-only); reseller debits PRICE; saga compensation (no Mongo txns); status/profit computed live
+- [3-Tier Wallet Architecture](wallet-3tier-architecture.md) — platform_main/agent/tenant wallets; all already implemented; key files + selling chain + frontend pages
+- [Bridge Recharge Architecture](bridge-recharge-architecture.md) — async USSD bridge; X-Tenant-ID auth pattern; saga compensation; Idoom atomic sell; critical pitfalls
+- [Unified print system](print-system.md) — per-record preview+print (thermal/A4, RTL) via printDocuments.js; settings in receipt.document_print; coexists w/ untouched POS/barcode print
+- [runTest hits backend port](e2e-test-port.md) — Playwright runTest opens primary URL (ext 80 = FastAPI) → 404 on frontend routes; use app_preview (port 5000) instead for UI checks
+- [Backup & Upgrade Safety System](backup-upgrade-system.md) — disk gzip storage, PRE-snapshots, integrity check, GLB- global backup, schema_version in system_meta; old system re-generated data at download time
