@@ -57,7 +57,7 @@ test_reports/
 # ========================
 # Frontend build artifacts
 # ========================
-frontend/build/
+# frontend/build/
 /build
 dist/
 /out/
