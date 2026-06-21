@@ -31,6 +31,11 @@ class ErrorBoundary extends React.Component {
             <p className="text-gray-600 mb-4">
               نعتذر عن هذا الخطأ. يرجى تحديث الصفحة أو المحاولة لاحقاً.
             </p>
+            {this.state.error && (
+              <pre className="text-left text-xs bg-gray-100 p-2 rounded mb-4 overflow-auto max-h-40">
+                {this.state.error.toString()}
+              </pre>
+            )}
             <button
               onClick={() => window.location.reload()}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
