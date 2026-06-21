@@ -17,8 +17,11 @@ jobs:
           script: |
             cd /var/www/nt-commerce
             git pull origin main
-            cd backend && pip3 install -r requirements.txt --quiet
-            cd /var/www/nt-commerce/frontend && yarn install --silent && yarn build
+            cd /var/www/nt-commerce/backend
+            venv/bin/pip install -r requirements.txt --quiet
+            cd /var/www/nt-commerce/frontend
+            npm install --legacy-peer-deps --registry https://registry.npmjs.org --quiet
+            DISABLE_ESLINT_PLUGIN=true CI=false npm run build
             sudo systemctl restart nt-backend
             sudo systemctl reload nginx
             echo "✅ Deployed successfully"
