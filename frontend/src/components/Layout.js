@@ -68,7 +68,8 @@ import {
   FileSpreadsheet,
   CircuitBoard,
   Tv,
-  Boxes
+  Boxes,
+  Calendar
 } from 'lucide-react';
 import { UnifiedSearch } from './UnifiedSearch';
 import { GlobalSearchModal } from './GlobalSearchModal';
