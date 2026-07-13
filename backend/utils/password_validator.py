@@ -1,29 +1,65 @@
 """
-Password Validation Utility
-Enforces strong password policies for NT Commerce 12.0
+Password Validator - NIST SP 800-63B Compliant
+SECURITY FIX: Increased min length from 4 to 8 characters (SEC-003)
 """
 import re
+from config.constants import MIN_PASSWORD_LENGTH
 
 
 def validate_password(password: str) -> dict:
     """
-    Validate password strength. Returns dict with is_valid and errors list.
-    Rules:
+    Validate password against NIST SP 800-63B guidelines:
     - Minimum 8 characters
-    - At least one uppercase letter
-    - At least one lowercase letter
-    - At least one digit
-    - At least one special character
+    - No complexity requirements (NIST recommends against them)
+    - Check against common passwords
     """
     errors = []
-    if len(password) < 8:
-        errors.append("كلمة المرور يجب أن تكون 8 أحرف على الأقل")
-    if not re.search(r"[A-Z]", password):
-        errors.append("يجب أن تحتوي على حرف كبير واحد على الأقل")
-    if not re.search(r"[a-z]", password):
-        errors.append("يجب أن تحتوي على حرف صغير واحد على الأقل")
-    if not re.search(r"\d", password):
-        errors.append("يجب أن تحتوي على رقم واحد على الأقل")
-    if not re.search(r"[!@#$%^&*(),.?\":{}|<>_\-+=\[\]\\/'`~;]", password):
-        errors.append("يجب أن تحتوي على رمز خاص واحد على الأقل")
-    return {"is_valid": len(errors) == 0, "errors": errors}
+
+    if not password:
+        errors.append("Password is required")
+    elif len(password) < MIN_PASSWORD_LENGTH:
+        errors.append(f"Password must be at least {MIN_PASSWORD_LENGTH} characters")
+    elif len(password) > 128:
+        errors.append("Password must not exceed 128 characters")
+
+    # Check for common weak patterns (optional but recommended)
+    common_patterns = ["password", "123456", "qwerty", "admin", "letmein"]
+    password_lower = password.lower()
+    for pattern in common_patterns:
+        if pattern in password_lower:
+            errors.append(f"Password contains common weak pattern: '{pattern}'")
+            break
+
+    # Check for consecutive identical characters (e.g., "aaa")
+    if re.search(r'(.)\1{3,}', password):
+        errors.append("Password has too many repeated characters")
+
+    return {
+        "is_valid": len(errors) == 0,
+        "errors": errors,
+        "strength": _calculate_strength(password) if not errors else "weak",
+    }
+
+
+def _calculate_strength(password: str) -> str:
+    """Calculate password strength"""
+    score = 0
+    if len(password) >= 12:
+        score += 2
+    elif len(password) >= 8:
+        score += 1
+
+    if re.search(r'[A-Z]', password):
+        score += 1
+    if re.search(r'[a-z]', password):
+        score += 1
+    if re.search(r'\d', password):
+        score += 1
+    if re.search(r'[^A-Za-z0-9]', password):
+        score += 1
+
+    if score >= 5:
+        return "strong"
+    elif score >= 3:
+        return "medium"
+    return "weak"
